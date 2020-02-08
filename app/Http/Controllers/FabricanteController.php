@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\FabricanteDatatable;
 use App\Fabricante;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,10 @@ class FabricanteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FabricanteDatatable $fabricanteDatatable)
     {
-        //
+        // return view('fabricante.index');
+        return $fabricanteDatatable->render('fabricante.index');
     }
 
     /**
@@ -24,7 +26,7 @@ class FabricanteController extends Controller
      */
     public function create()
     {
-        //
+        return view('fabricante.form');
     }
 
     /**
@@ -35,7 +37,14 @@ class FabricanteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        try {
+            Fabricante::create($request->all());
+
+            return redirect()->route('fabricante.index');
+        } catch (\Throwable $th) {
+            return back()->withInput();
+        }
     }
 
     /**

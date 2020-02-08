@@ -13,6 +13,7 @@
         "jeroennoten/laravel-adminlte": "2.0.1",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "laravelcollective/html": "5.8.*",
         "yajra/laravel-datatables-buttons": "^4.0",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
