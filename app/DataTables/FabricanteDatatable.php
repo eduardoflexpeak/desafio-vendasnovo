@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Fabricante;
+use Collective\Html\FormFacade;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -22,9 +23,22 @@ class FabricanteDatatable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addColumn('action', function ($fabricante) {
-                $action = '<a href="' . route('fabricante.edit', $fabricante->id) . '" type="button" class="btn btn-sm btn-primary">Editar</a>';
-                $action .= ' <a type="button" class="btn btn-sm btn-danger">Excluir</a>';
-                return $action;
+
+                $acoes = link_to(
+                            route('fabricante.edit', $fabricante),
+                            'Editar',
+                            ['class' => 'btn btn-sm btn-primary']
+                        );
+
+                $acoes .= FormFacade::button(
+                            'Excluir',
+                            ['class' =>
+                                'btn btn-sm btn-danger',
+                                'onclick' => "delete($fabricante->id)"
+                            ]
+                        );
+
+                return $acoes;
             });
     }
 
@@ -70,10 +84,9 @@ class FabricanteDatatable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                //   ->width(60)
-                  ->addClass('text-center'),
+                    ->title('Ações')
+                    ->exportable(false)
+                    ->printable(false),
             Column::make('id'),
             Column::make('nome'),
             Column::make('site'),

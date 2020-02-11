@@ -219,6 +219,11 @@ return [
                     'asset' => false,
                     'location' => '//cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js',
                 ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/vendor/datatables/buttons.server-side.js',
+                ],
 
             ],
         ],

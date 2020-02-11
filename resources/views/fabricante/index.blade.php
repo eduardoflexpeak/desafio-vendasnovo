@@ -7,13 +7,16 @@
 @stop
 
 @section('content')
-    {!! $dataTable->table() !!}
+    <div class="box">
+        <div class="box-body">
+            {!! $dataTable->table() !!}
+        </div>
+    </div>
 @stop
 
 @section('css')
 @stop
 
 @section('js')
-<script src="/vendor/datatables/buttons.server-side.js"></script>
     {!! $dataTable->scripts() !!}
 @stop
