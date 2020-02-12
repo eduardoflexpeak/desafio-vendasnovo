@@ -7,7 +7,11 @@
 @stop
 
 @section('content')
-    {!! Form::open(['url' => route('fabricante.store')]) !!}
+    @if (isset($fabricante))
+        {!! Form::model($fabricante, ['url' => route('fabricante.update', $fabricante), 'method' => 'put']) !!}
+    @else
+        {!! Form::open(['url' => route('fabricante.store')]) !!}
+    @endif
         {!! Form::label('nome', 'Nome Fabricante') !!}
         {!! Form::text('nome') !!}
         {!! Form::label('site', 'Site Fabricante') !!}
