@@ -54,8 +54,12 @@ class FabricanteController extends Controller
         }
     }
 
-    public function destroy(Fabricante $fabricante)
+    public function destroy($id)
     {
-        //
+        try {
+            Fabricante::find($id)->delete();
+        } catch (\Throwable $th) {
+            abort(403, 'Erro ao excluir');
+        }
     }
 }

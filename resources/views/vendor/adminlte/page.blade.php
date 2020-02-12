@@ -158,6 +158,20 @@
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     <script>
         $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
+
+        function excluir(rota) {
+            bootbox.confirm('Deseja mesmo excluir?', function(sim) {
+                if (sim) {
+                    axios.delete(rota)
+                        .then(function (res) {
+                            $('#' + Object.keys(window.LaravelDataTables)[0]).DataTable().ajax.reload();
+                        })
+                        .catch(function (err) {
+                            bootbox.alert('Ops! Ocorreu um erro ao excluir');
+                        });
+                }
+            });
+        }
     </script>
     @stack('js')
     @yield('js')

@@ -224,6 +224,16 @@ return [
                     'asset' => true,
                     'location' => '/vendor/datatables/buttons.server-side.js',
                 ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//unpkg.com/axios/dist/axios.min.js',
+                ],
 
             ],
         ],
