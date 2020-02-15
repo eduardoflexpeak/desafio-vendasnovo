@@ -2,84 +2,77 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ProdutoDataTable;
+use App\Fabricante;
 use App\Produto;
 use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(ProdutoDataTable $produtoDatatable)
     {
-        //
+        return $produtoDatatable->render('produto.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $fabricantes = Fabricante::all()->pluck('nome', 'id');
+        $unidades_medidas = Produto::UNIDADES_MEDIDAS;
+
+        return view('produto.form', [
+            'fabricantes' => $fabricantes,
+            'unidades_medidas' => $unidades_medidas
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        try {
+            Produto::create($request->all());
+            flash('Salvo com sucesso')->success();
+            return redirect()->route('produto.index');
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+            flash('Ops! Ocorreu um erro ao selecionar')->error();
+            return back()->withInput();
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Produto  $produto
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Produto $produto)
+    public function edit($id)
     {
-        //
+        try {
+            $fabricantes = Fabricante::all()->pluck('nome', 'id');
+            $unidades_medidas = Produto::UNIDADES_MEDIDAS;
+
+            return view('produto.form', [
+                'produto' => Produto::findOrFail($id),
+                'fabricantes' => $fabricantes,
+                'unidades_medidas' => $unidades_medidas
+            ]);
+        } catch (\Throwable $th) {
+            flash('Ops! Ocorreu um erro ao selecionar')->error();
+            return redirect()->route('produto.index');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Produto  $produto
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Produto $produto)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            Produto::find($id)->update($request->all());
+            flash('Atualizado com sucesso')->success();
+            return redirect()->route('produto.index');
+        } catch (\Throwable $th) {
+            flash('Ops! Ocorreu um erro ao atualizar')->error();
+            return back()->withInput();
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Produto  $produto
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Produto $produto)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Produto  $produto
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Produto $produto)
-    {
-        //
+        try {
+            Produto::find($id)->delete();
+        } catch (\Throwable $th) {
+            abort(403, 'Erro ao excluir');
+        }
     }
 }
