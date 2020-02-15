@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Fabricante;
+use App\Pessoa;
 use Collective\Html\FormFacade;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -10,7 +10,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Html\Editor\Editor;
 
-class FabricanteDatatable extends DataTable
+class PessoaDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -22,33 +22,37 @@ class FabricanteDatatable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', function ($fabricante) {
+            ->addColumn('action', function ($pessoa) {
 
                 $acoes = link_to(
-                            route('fabricante.edit', $fabricante),
-                            'Editar',
-                            ['class' => 'btn btn-sm btn-primary']
-                        );
+                    route('pessoa.edit', $pessoa),
+                    'Editar',
+                    ['class' => 'btn btn-sm btn-primary']
+                );
 
                 $acoes .= FormFacade::button(
                             'Excluir',
                             ['class' =>
                                 'btn btn-sm btn-danger',
-                                'onclick' => "excluir('" . route('fabricante.destroy', $fabricante) . "')"
+                                'onclick' => "excluir('" . route('pessoa.destroy', $pessoa) . "')"
                             ]
                         );
 
                 return $acoes;
+
+            })
+            ->editColumn('grupo', function ($pessoa) {
+                return Pessoa::GRUPOS[$pessoa->grupo];
             });
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\FabricanteDatatable $model
+     * @param \App\Pessoa $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Fabricante $model)
+    public function query(Pessoa $model)
     {
         return $model->newQuery();
     }
@@ -61,7 +65,7 @@ class FabricanteDatatable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('fabricantedatatable-table')
+                    ->setTableId('pessoa-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
@@ -82,13 +86,13 @@ class FabricanteDatatable extends DataTable
     {
         return [
             Column::computed('action')
-                    ->title('Ações')
-                    ->exportable(false)
-                    ->printable(false),
+                  ->exportable(false)
+                  ->printable(false),
             Column::make('id'),
             Column::make('nome'),
-            Column::make('site'),
-            Column::make('created_at'),
+            Column::make('telefone'),
+            Column::make('email'),
+            Column::make('grupo')
         ];
     }
 
@@ -99,6 +103,6 @@ class FabricanteDatatable extends DataTable
      */
     protected function filename()
     {
-        return 'Fabricante_' . date('YmdHis');
+        return 'Pessoa_' . date('YmdHis');
     }
 }

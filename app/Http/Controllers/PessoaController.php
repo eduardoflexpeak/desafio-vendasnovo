@@ -2,84 +2,67 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\PessoaDataTable;
 use App\Pessoa;
 use Illuminate\Http\Request;
 
 class PessoaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(PessoaDataTable $pessoaDatatable)
     {
-        //
+        return $pessoaDatatable->render('pessoa.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $grupos = Pessoa::GRUPOS;
+
+        return view('pessoa.form', compact('grupos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        try {
+            Pessoa::create($request->all());
+            flash('Salvo com sucesso')->success();
+            return redirect()->route('pessoa.index');
+        } catch (\Throwable $th) {
+            flash('Ops! Ocorreu um erro ao selecionar')->error();
+            return back()->withInput();
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Pessoa  $pessoa
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Pessoa $pessoa)
+    public function edit($id)
     {
-        //
+        try {
+            return view('pessoa.form', [
+                'pessoa' => Pessoa::findOrFail($id),
+                'grupos' => Pessoa::GRUPOS
+            ]);
+        } catch (\Throwable $th) {
+            flash('Ops! Ocorreu um erro ao selecionar')->error();
+            return redirect()->route('pessoa.index');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Pessoa  $pessoa
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pessoa $pessoa)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            Pessoa::find($id)->update($request->all());
+            flash('Atualizado com sucesso')->success();
+            return redirect()->route('pessoa.index');
+        } catch (\Throwable $th) {
+            flash('Ops! Ocorreu um erro ao atualizar')->error();
+            return back()->withInput();
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pessoa  $pessoa
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pessoa $pessoa)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Pessoa  $pessoa
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pessoa $pessoa)
-    {
-        //
+        try {
+            Pessoa::find($id)->delete();
+        } catch (\Throwable $th) {
+            abort(403, 'Erro ao excluir');
+        }
     }
 }

@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'skin' => 'green',
+    'skin' => 'blue',
 
     /*
     |--------------------------------------------------------------------------
@@ -136,10 +136,11 @@ return [
                 [
                     'text' => 'Pessoas',
                     'icon' => 'fa fa-users',
-                    'url'  => '#',
+                    'url'  => 'pessoa',
                 ],
                 [
                     'text' => 'Fabricantes',
+                    'icon' => 'fa fa-university',
                     'url'  => 'fabricante',
                 ],
                 [

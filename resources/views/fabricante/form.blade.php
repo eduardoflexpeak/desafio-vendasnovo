@@ -12,12 +12,16 @@
     @else
         {!! Form::open(['url' => route('fabricante.store')]) !!}
     @endif
-        {!! Form::label('nome', 'Nome Fabricante') !!}
-        {!! Form::text('nome') !!}
-        {!! Form::label('site', 'Site Fabricante') !!}
-        {!! Form::text('site') !!}
+        <div class="form-group">
+            {!! Form::label('nome', 'Nome Fabricante') !!}
+            {!! Form::text('nome', null, ['class' => 'form-control']) !!}
+        </div>
+        <div class="form-group">
+            {!! Form::label('site', 'Site Fabricante') !!}
+            {!! Form::text('site', null, ['class' => 'form-control']) !!}
+        </div>
 
-        {!! Form::submit('Salvar') !!}
+        {!! Form::submit('Salvar', ['class' => 'btn btn-primary']) !!}
     {!! Form::close() !!}
 @stop
 
