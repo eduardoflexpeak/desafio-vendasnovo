@@ -27,7 +27,7 @@ class PessoaController extends Controller
             flash('Salvo com sucesso')->success();
             return redirect()->route('pessoa.index');
         } catch (\Throwable $th) {
-            flash('Ops! Ocorreu um erro ao selecionar')->error();
+            flash('Ops! Ocorreu um erro ao salvar')->error();
             return back()->withInput();
         }
     }

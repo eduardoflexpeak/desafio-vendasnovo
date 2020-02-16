@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Pessoa;
 use App\Venda;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -21,7 +22,15 @@ class VendaDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', '...');
+            ->addColumn('action', function ($venda) {
+                return link_to( route('venda.show', $venda), 'Ver', ['class' => 'btn btn-sm btn-primary']);
+            })
+            ->editColumn('pessoa_id', function ($venda) {
+                return $venda->pessoa->nome;
+            })
+            ->editColumn('created_at', function ($venda) {
+                return $venda->created_at->format('d/m/Y');
+            });
     }
 
     /**
@@ -66,11 +75,11 @@ class VendaDataTable extends DataTable
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false),
-            Column::make('pessoa_id'),
-            Column::make('desconto'),
-            Column::make('acrescimo'),
-            Column::make('total'),
-            Column::make('created_at')
+            Column::make('pessoa_id')->title('Cliente'),
+            Column::make('desconto')->title('Desconto'),
+            Column::make('acrescimo')->title('Acréscimo'),
+            Column::make('total')->title('Total'),
+            Column::make('created_at')->title('Data da Venda')
         ];
     }
 

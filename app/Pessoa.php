@@ -20,6 +20,8 @@ class Pessoa extends Model
         self::COLABORADOR   => 'Colaborador',
     ];
 
-
-
+    public function vendas()
+    {
+        return $this->hasMany(Venda::class);
+    }
 }
