@@ -38,6 +38,15 @@ class ProdutoController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        try {
+            return Produto::findOrFail($id);
+        } catch (\Throwable $th) {
+            abort(403, 'Erro ao selecionar o produto');
+        }
+    }
+
     public function edit($id)
     {
         try {
@@ -74,5 +83,21 @@ class ProdutoController extends Controller
         } catch (\Throwable $th) {
             abort(403, 'Erro ao excluir');
         }
+    }
+
+    public function listaProdutos(Request $request)
+    {
+        $termoPesquisa = trim($request->searchTerm);
+
+        if (empty($termoPesquisa)) {
+            return Produto::select('id', 'descricao as text')
+                            ->limit(10)
+                            ->get();
+        }
+
+        return Produto::select('id', 'descricao as text')
+                        ->where('descricao', 'like', '%' . $termoPesquisa . '%')
+                        ->limit(10)
+                        ->get();
     }
 }

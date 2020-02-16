@@ -2,16 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Fabricante;
-use App\Produto;
-use Collective\Html\FormFacade;
+use App\Venda;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Html\Editor\Editor;
 
-class ProdutoDataTable extends DataTable
+class VendaDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -23,43 +21,16 @@ class ProdutoDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', function ($produto) {
-
-                $acoes = link_to(
-                    route('produto.edit', $produto),
-                    'Editar',
-                    ['class' => 'btn btn-sm btn-primary']
-                );
-
-                $acoes .= FormFacade::button(
-                            'Excluir',
-                            ['class' =>
-                                'btn btn-sm btn-danger',
-                                'onclick' => "excluir('" . route('produto.destroy', $produto) . "')"
-                            ]
-                        );
-
-                return $acoes;
-
-            })
-            ->editColumn('fabricante_id', function ($produto) {
-                return Fabricante::find($produto->fabricante_id)->nome;
-            })
-            ->editColumn('unidade_medida', function ($produto) {
-                return Produto::UNIDADES_MEDIDAS[$produto->unidade_medida];
-            })
-            ->editColumn('created_at', function ($produto) {
-                return $produto->created_at->format('d/m/Y');
-            });
+            ->addColumn('action', '...');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Produto $model
+     * @param \App\Venda $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Produto $model)
+    public function query(Venda $model)
     {
         return $model->newQuery();
     }
@@ -72,7 +43,7 @@ class ProdutoDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('produto-table')
+                    ->setTableId('venda-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('Bfrtip')
@@ -95,12 +66,10 @@ class ProdutoDataTable extends DataTable
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false),
-            Column::make('descricao'),
-            Column::make('estoque'),
-            Column::make('preco_custo'),
-            Column::make('preco_venda'),
-            Column::make('fabricante_id'),
-            Column::make('unidade_medida'),
+            Column::make('pessoa_id'),
+            Column::make('desconto'),
+            Column::make('acrescimo'),
+            Column::make('total'),
             Column::make('created_at')
         ];
     }
@@ -112,6 +81,6 @@ class ProdutoDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Produto_' . date('YmdHis');
+        return 'Venda_' . date('YmdHis');
     }
 }

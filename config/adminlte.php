@@ -152,7 +152,8 @@ return [
         ],
         [
             'text'       => 'Vendas',
-            'icon_color' => 'red',
+            'icon' => 'fa fa-shopping-cart',
+            'url' => 'venda',
         ],
         [
             'text'       => 'Relatorios',

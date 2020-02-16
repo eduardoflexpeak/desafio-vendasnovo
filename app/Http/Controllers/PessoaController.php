@@ -65,4 +65,22 @@ class PessoaController extends Controller
             abort(403, 'Erro ao excluir');
         }
     }
+
+    public function listaClientes(Request $request)
+    {
+        $termoPesquisa = trim($request->searchTerm);
+
+        if (empty($termoPesquisa)) {
+            return Pessoa::select('id', 'nome as text')
+                            ->where('grupo', Pessoa::CLIENTE)
+                            ->limit(10)
+                            ->get();
+        }
+
+        return Pessoa::select('id', 'nome as text')
+                        ->where('grupo', Pessoa::CLIENTE)
+                        ->where('nome', 'like', '%' . $termoPesquisa . '%')
+                        ->limit(10)
+                        ->get();
+    }
 }
