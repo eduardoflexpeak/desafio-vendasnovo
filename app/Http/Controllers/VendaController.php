@@ -63,7 +63,13 @@ class VendaController extends Controller
 
     public function show($id)
     {
-        //
+        try {
+            $venda = Venda::find($id);
+            return view('venda.show', compact('venda'));
+        } catch (\Throwable $th) {
+            flash('Ops! Ocorreu um erro ao exibir a venda')->error();
+            return back()->withInput();
+        }
     }
 
     public function edit(Venda $venda)

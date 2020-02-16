@@ -32,7 +32,6 @@ class ProdutoController extends Controller
             flash('Salvo com sucesso')->success();
             return redirect()->route('produto.index');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             flash('Ops! Ocorreu um erro ao selecionar')->error();
             return back()->withInput();
         }
