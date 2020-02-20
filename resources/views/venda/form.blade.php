@@ -13,15 +13,20 @@
             <label for="pessoa_id">Cliente</label>
             <select class="form-control" name="pessoa_id" id="select-clientes"></select>
         </div>
-
         <div class="form-group">
             <label for="observacao">Observação</label>
             <textarea class="form-control" name="observacao" id="observacao" rows="3"></textarea>
         </div>
-
+        <div class="form-group">
+            {!! Form::label('forma_pagamento', 'Forma de Pagamento') !!}
+            {!! Form::select('forma_pagamento', $formas_pagamento, null,
+            ['class' => 'form-control', 'onchange' => 'formaPagamento()']) !!}
+        </div>
         <div>
             <button type="submit" class="btn btn-primary">Finalizar Venda</button>
             <span id="total-geral" style="font-size: 25px; margin-left: 25px;">Total: 0.0</span>
+            <span id="total-desconto" style="font-size: 25px; margin-left: 25px;">Com Desconto: 0.0</span>
+            <span id="total-acrescimo" style="font-size: 25px; margin-left: 25px;">Com Acréscimo: 0.0</span>
         </div>
 
         <div style="height: 15px;"></div>
@@ -31,12 +36,12 @@
                 <h3 class="box-title">Produtos da Venda</h3>
 
                 <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
                     </button>
                 </div>
             </div>
             <div class="box-body">
-
                 <div class="row">
                     <div class="form-group col-sm-4">
                         <label for="pessoa_id">Produtos</label>
@@ -64,7 +69,6 @@
                     <tbody id="itens-venda">
                     </tbody>
                 </table>
-
             </div>
         </div>
     </form>
@@ -76,15 +80,8 @@
 @section('js')
 <script>
     var totalGeral = 0;
-
-    $('#form-venda').submit(function(){
-        if (totalGeral == 0) {
-            bootbox.alert('Ops! A venda precisa ter pelo menos um produto');
-            return false;
-        }
-
-        return true;
-    });
+    var totalComDesconto = 0;
+    var totalComAcrescimo = 0;
 
     $('#select-clientes').select2({
         ajax: {
@@ -102,6 +99,7 @@
             },
         }
     });
+
     $('#select-produtos').select2({
         ajax: {
             url: '{{ route('lista.produtos') }}',
@@ -117,6 +115,15 @@
                 };
             },
         }
+    });
+
+    $('#form-venda').submit(function(){
+        if (totalGeral == 0) {
+            bootbox.alert('Ops! A venda precisa ter pelo menos um produto');
+            return false;
+        }
+
+        return true;
     });
 
     function adicionarProduto() {
@@ -151,6 +158,26 @@
 
         $('#total-geral').html('Total: ' + totalGeral.toFixed(2));
         $('#itens-venda').append(item);
+
+        formaPagamento();
+    }
+
+    function formaPagamento() {
+        let forma_pagamento = $('#forma_pagamento').val();
+
+        if(totalGeral > 0) {
+            if(forma_pagamento == 0) {
+                totalComDesconto = totalGeral - 5 / 100 * totalGeral
+                $('#total-desconto').html('Com Desconto: ' + totalComDesconto.toFixed(2));
+                $('#total-acrescimo').html('Com Acréscimo: 0.0');
+            } else if(forma_pagamento == 1) {
+                totalComAcrescimo = 10 / 100 * totalGeral + totalGeral
+                $('#total-acrescimo').html('Com Acréscimo: ' + totalComAcrescimo.toFixed(2));
+                $('#total-desconto').html('Com Desconto: 0.0');
+            }
+
+            $('#total-geral').html('Total: ' + totalGeral.toFixed(2));
+        }
     }
 </script>
 @stop

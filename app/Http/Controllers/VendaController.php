@@ -17,7 +17,11 @@ class VendaController extends Controller
 
     public function create()
     {
-        return view('venda.form');
+        $formas_pagamento = Venda::FORMAS_PAGAMENTO;
+
+        return view('venda.form', [
+            'formas_pagamento' => $formas_pagamento
+        ]);
     }
 
     public function store(Request $request)
