@@ -53,7 +53,22 @@ class VendaController extends Controller
                 ]);
             }
 
-            $venda->update(['total' => $totalGeral]);
+            $desconto = 0;
+            $acrescimo = 0;
+
+            if ($request->forma_pagamento == Venda::A_VISTA) {
+                $desconto = 5 / 100 * $totalGeral;
+                $totalGeral -= $desconto;
+            } elseif ($request->forma_pagamento == Venda::CREDIARIO) {
+                $acrescimo = 10 / 100 * $totalGeral;
+                $totalGeral += $acrescimo;
+            }
+
+            $venda->update([
+                'total' => $totalGeral,
+                'desconto' => $desconto,
+                'acrescimo' => $acrescimo,
+            ]);
 
             DB::commit();
             flash('Venda finalizada com sucesso')->success();
