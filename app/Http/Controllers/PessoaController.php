@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\PessoaDataTable;
+use App\Http\Requests\PessoaRequest;
 use App\Pessoa;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,7 @@ class PessoaController extends Controller
         return view('pessoa.form', compact('grupos'));
     }
 
-    public function store(Request $request)
+    public function store(PessoaRequest $request)
     {
         try {
             Pessoa::create($request->all());

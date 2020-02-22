@@ -237,6 +237,11 @@ return [
                     'asset' => false,
                     'location' => '//unpkg.com/axios/dist/axios.min.js',
                 ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js',
+                ],
 
             ],
         ],
